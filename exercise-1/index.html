@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <title>Maneesh Exercise 1</title>
+</head>
+
+<body onload="dataFetcher()">
+    <div id="users">
+        hello
+    </div>
+    <script>
+        //Api call to get data.
+        const dataFetcher = () => {
+            fetch('https://5dc588200bbd050014fb8ae1.mockapi.io/assessment')
+                .then(resp => {console.log(resp); return resp.json()})
+                .then(data => {
+                    createList(data)
+                });
+        }
+
+        // create entire list of elements from data using handle bars.
+        const createList = (data) => {
+            const unorderedList = `<ul> 
+                {{#each row}} 
+                <li>
+                 <p> User Name : {{this.name}} </p> 
+                 <img src={{this.avatar}} alt= 'No Avatar'> 
+                 <button type=button onclick='displayFunc({{this.id}})'>More Info</button>
+                 <p id={{this.id}} style = 'display: none'> ID : {{this.id}} Created Date : {{this.createdAt}}</p>
+                 </li>
+                 {{/each}} 
+                 </ul>`;
+            const template = Handlebars.compile(unorderedList);
+            document.getElementById("users").innerHTML = template({ row: data });
+        }
+
+        //hide or display on button press
+        const displayFunc = (id) => {
+            var el = document.getElementById(id);
+            if (el.style.display === "none") {
+                el.style.display = "block";
+            } else {
+                el.style.display = "none";
+            }
+        }
+
+    </script>
+</body>
+
+</html>
